@@ -1,0 +1,37 @@
+#  Do the following docker and sql related tasks.
+
+- Use this dataset: https://raw.githubusercontent.com/erkansirin78/datasets/master/retail_db/customers.csv 
+wget https://raw.githubusercontent.com/erkansirin78/datasets/master/retail_db/customers.csv
+
+## 1. 
+- Create a docker-compose.yaml file that creates mysql and postgresql containers.
+docker-compose up -d
+
+## 2. 
+- Create (on both mysql and postgresql) **dataops** db and **dataops_user** user. Grant `dataops_user`with full permissions on `dataops` database.
+docker exec -it 1a0a0f9f psql -U postgres
+
+\l
+CREATE DATABASE DATAOPS;
+CREATE USER dataops_user WITH ENCRYPTED PASSWORD 'ahajiyev123';
+GRANT ALL PRIVILEGES ON DATABASE dataops TO dataops_user;
+
+docker exec -it 79d0e391d1aa mysql -u root -p 
+ahajiyev123
+
+SHOW DATABASES;
+CREATE DATABASE dataops;
+CREATE USER 'dataops_user' IDENTIFIED BY 'ahajiyev123';
+GRANT ALL PRIVILEGES ON dataops.* TO 'dataops_user'@'%';
+
+## 3. 
+- Create a table in `dataops` db then insert first 5 rows of dataset to **customer** table.
+
+## 4. 
+- Update customerId 3 customerLName Smith as Fox.
+
+## 5. 
+- Delete customerId 5 (Robert Hudson).
+
+## 6. 
+- SELECT customerFName, customerStreet,customerCity,customerState,customerZipcode where the customerFName is Marry.
