@@ -1,10 +1,11 @@
-#  Do the following docker and sql related tasks.
-
 - Use this dataset: https://raw.githubusercontent.com/erkansirin78/datasets/master/retail_db/customers.csv 
+
+cd data
 wget https://raw.githubusercontent.com/erkansirin78/datasets/master/retail_db/customers.csv
 
 ## 1. 
 - Create a docker-compose.yaml file that creates mysql and postgresql containers.
+
 docker-compose up -d
 
 ## 2. 
@@ -27,11 +28,40 @@ GRANT ALL PRIVILEGES ON dataops.* TO 'dataops_user'@'%';
 ## 3. 
 - Create a table in `dataops` db then insert first 5 rows of dataset to **customer** table.
 
+CREATE TABLE IF NOT EXISTS dataops.customers (
+  customerId INT PRIMARY KEY,
+  customerFName VARCHAR(255),
+  customerLName VARCHAR(255),
+  customerEmail VARCHAR(255),
+  customerPassword VARCHAR(255),
+  customerStreet VARCHAR(255),
+  customerCity VARCHAR(255),
+  customerState VARCHAR(255),
+  customerZipcode VARCHAR(255)
+);
+
+head -n 6 customers.csv > customers_first5.csv
+docker exec -it a77 psql -U dataops_user -d dataops -c "\copy customers FROM './files/customers_first5.csv' DELIMITERS ',' CSV HEADER;"
+
 ## 4. 
 - Update customerId 3 customerLName Smith as Fox.
+
+update public.customers
+set customerLName='Fox'
+where customerId=3;
+commit;
 
 ## 5. 
 - Delete customerId 5 (Robert Hudson).
 
+delete from public.customers
+where customerId=5;
+commit;
+
 ## 6. 
-- SELECT customerFName, customerStreet,customerCity,customerState,customerZipcode where the customerFName is Marry.
+- SELECT customerFName, customerStreet,customerCity,customerState,customerZipcode where the customerFName is Marry (Mary).
+
+select customerFName, customerStreet,customerCity,customerState,customerZipcode 
+from public.customers
+where customerFName='Mary';
+commit;
