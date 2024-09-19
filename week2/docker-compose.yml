@@ -1,0 +1,25 @@
+services:
+  db_postgres:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ahajiyev123
+    ports:
+      - "5433:5432"
+    volumes:
+      - ./data:/files
+
+  db_mysql:
+    image: mysql:8
+    environment:
+      MYSQL_ROOT_PASSWORD: ahajiyev123
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./data:/files
+
+volumes:
+  postgres-data:
+    driver: local
+  mysql-data:
+    driver: local

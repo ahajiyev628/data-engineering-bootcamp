@@ -1,0 +1,20 @@
+mkdir linux_basic
+mkdir dataops
+cd dataops
+wget https://raw.githubusercontent.com/erkansirin78/datasets/master/Churn_Modelling.csv
+ls /etc/*.conf
+echo "Hello! DataOps Bootcamp has started." > dataops.txt
+mkdir yellow
+cd yellow
+touch red.txt blue.txt
+echo "My Name is Red" > red.txt
+echo "My Name is Blue" > blue.txt
+cat red.txt >> blue.txt
+cat blue.txt >> red.txt
+cat blue.txt
+cp red.txt ../red_copied.txt
+cp blue.txt ../blue_copied.txt
+tree yellow
+wget https://raw.githubusercontent.com/erkansirin78/datasets/master/Wine.csv
+head -10 Wine.csv
+awk -F, '$1 > 14' Wine.csv
