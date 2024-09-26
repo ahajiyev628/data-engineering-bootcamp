@@ -1,0 +1,32 @@
+1. run docker-compose file:
+    docker-compose up -d
+
+2. install csv file into dataops folder which is mounted to the folder with the same name inside container:
+    wget https://raw.githubusercontent.com/erkansirin78/datasets/master/Wine.csv
+
+3. create '/user/root/hdfs_odev' directory in hdfs:
+    hdfs dfs -mkdir /user
+    hdfs dfs -mkdir /user/root
+    hdfs dfs -mkdir /user/root/hdfs_odev
+
+4. put the installed csv file in hdfs directory which was created in the previous step:
+    hdfs dfs -put Wine.csv /user/root/hdfs_odev
+
+5. view first few rows of csv:
+    hdfs dfs -head /user/root/hdfs_odev/Wine.csv
+
+6. create a new '/user/root/hdfs_odev' directory in hdfs:
+    hdfs dfs -mkdir /tmp
+    hdfs dfs -mkdir /tmp/hdfs_odev
+
+7. copy the file in the previous directory to the new directory '/tmp/hdfs_odev':
+    hdfs dfs -cp /user/root/hdfs_odev/Wine.csv /tmp/hdfs_odev
+
+8. list the files in the directory:
+    hdfs dfs -ls /tmp/hdfs_odev
+    hdfs dfs -ls hdfs://cluster-master:9000/tmp/hdfs_odev
+
+9. delete the copied file from the directory '/tmp/hdfs_odev' with skipping the trash:
+    hdfs dfs -rm -r -skipTrash hdfs://cluster-master:9000/tmp/hdfs_odev
+
+10. step10.png was attached.
