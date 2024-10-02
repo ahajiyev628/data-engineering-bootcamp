@@ -1,0 +1,71 @@
+1. Run docker-compose file to up the application containers, view their status, and check the master logs to see if hadoop services were started:
+    docker-compose up -d
+    docker ps --format "table {{.ID}}\t{{.Names}}\t{{.Status}}"
+    docker logs -f cluster-master
+
+2. Get into cluster-master, and initialize Hive metastore schema:
+    docker exec -it cluster-master bash
+    schematool -initSchema -dbType postgres
+
+3. Start Hive services, and check process id to make sure if services started:
+    $HADOOP_HOME/start-hive.sh
+    pgrep -f org.apache.hive.service.server.HiveServer2
+    pgrep -f org.apache.hadoop.hive.metastore.HiveMetaStore
+
+4. Connect to Beeline which is Hive shell:
+    $HIVE_HOME/bin/beeline -u jdbc:hive2://localhost:10000  or  beeline -u jdbc:hive2://cluster-master:10000
+    Note: !q to exit the shell
+
+5. Set config to remove logs, and show databases in Beeline:
+    set hive.server2.logging.operation.level=NONE;
+    show databases;
+
+6. Create a hive database 'hive_odev', and view describe database with details, such as location and owner:
+    create database if not exists hive_odev comment 'This db is created by Allahverdi Hajiyev.';
+    describe database hive_odev;
+
+7. Load csv file into cluster-master, view first few records:
+    curl -O https://raw.githubusercontent.com/erkansirin78/datasets/master/Wine.csv
+    head Wine.csv
+    
+8. Create a directory in hdfs, transfer Wine.csv file to this directory, list the directory to see the file:
+    hdfs dfs -mkdir -p /user/root/datasets
+    hdfs dfs -put Wine.csv /user/root/datasets
+    hdfs dfs -ls /user/root/datasets
+
+9. Return back to Beeline, use database created in step 6, create a new wine table in this database:
+    use hive_odev;
+
+    create table if not exists hive_odev.wine (
+        alcohol float, malic_acid float, ash float, ash_alkalinity float, magnesium int, total_phenols float, flavanoids float,
+        nonflavanoid_phenols float, proanthocyanins float, color_intensity float, hue float, od280 float, proline float, customer_segment int)
+    row format delimited
+    fields terminated by ','
+    lines terminated by '\n'
+    stored as textfile
+    tblproperties ('skip.header.line.count' = '1');
+
+10. List tables in the database, and show detailed info about wine table in hive_odev database:
+    show tables;
+    select * from hive_odev.wine;
+    describe hive_odev.wine;
+    show create table hive_odev.wine;
+    show tblproperties hive_odev.wine;
+
+11. Load data in csv file into wine table, and view 5 rows of the table:
+    load data local inpath '/dataops/Wine.csv' into table hive_odev.wine;
+    select * from hive_odev.wine limit 5;
+
+12. Create wine_alc_gt_13 table and load data from wine table where alcohol column stores data greater than 13.00:
+    create table hive_odev.wine_alc_gt_13 as select * from hive_odev.wine where alcohol>13.00;
+    select * from hive_odev.wine_alc_gt_13 limit 5;
+
+13. Drop database together with table with it:
+    drop database hive_odev cascade;
+    show databases;
+
+14.
+
+
+
+
