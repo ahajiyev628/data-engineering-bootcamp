@@ -1,0 +1,62 @@
+1. Run docker-compose file to up the schema registry and kafka cluster with 3 brockers, and then view the status of containers:
+    docker-compose up -d
+    docker ps --format "table {{.ID}}\t{{.Names}}\t{{.Status}}"
+
+2. Get into one of the kafka brockers in the cluster:
+    docker exec -it kafka1 bash
+
+3. Create a topic named `atscale` with 2 partitions and replication factor 1:
+    kafka/bin/kafka-topics.sh --bootstrap-server localhost:9092 \
+    --create --topic atscale \
+    --partitions 2 --replication-factor 1
+
+4. List all topics:
+    kafka/bin/kafka-topics.sh --bootstrap-server localhost:9092 \
+    --list
+
+5. Describe `atscale` topic:
+    kafka/bin/kafka-topics.sh --bootstrap-server localhost:9092 \
+    --describe --topic atscale
+
+    Topic: atscale  TopicId: d-YwP68_ThySrye8rrT8mw PartitionCount: 2       ReplicationFactor: 1    Configs: segment.bytes=1073741824
+        Topic: atscale  Partition: 0    Leader: 1       Replicas: 1     Isr: 1  Elr:    LastKnownElr: 
+        Topic: atscale  Partition: 1    Leader: 2       Replicas: 2     Isr: 2  Elr:    LastKnownElr: 
+
+6. Create a topic named `churn` with 3 partitions:
+    kafka/bin/kafka-topics.sh --bootstrap-server localhost:9092 \
+    --create --topic churn \
+    --partitions 3
+
+7. Then create a producer for churn topic:
+    /kafka/bin/kafka-console-producer.sh \
+    --bootstrap-server localhost:9092 \
+    --topic churn
+
+8. Open other 3 terminal, get into one of the kafka brocker container, and run the following command to create 'churn_group' producer group for churn topic:
+    /kafka/bin/kafka-console-consumer.sh \
+    --bootstrap-server localhost:9092 \
+    --topic churn \
+    --group churn_group \
+    --property print.partition=true \
+    --property print.key=true
+
+9. Return back to producer, install necessary python libraries, and then execute dataframe_to_kafka.py file with some arguments, such as topic name, file to be sent and etc.:
+    python3 -m pip install pip --upgrade
+    python3 -m pip install -r requirements.txt
+
+    python3 dataframe_to_kafka.py \
+    -t churn \
+    -i "https://raw.githubusercontent.com/erkansirin78/datasets/master/Churn_Modelling.csv" \
+    -e csv \
+    -k 1 \
+    -b "localhost:9092" \
+    -s ',' \
+    -shf true
+
+    Note: The output image for producer and consumers was attached as week5.png
+
+10. Delete `atscale` and `churn` topics.
+    kafka/bin/kafka-topics.sh --bootstrap-server localhost:9092 \
+    --delete --topic atscale
+    kafka/bin/kafka-topics.sh --bootstrap-server localhost:9092 \
+    --delete --topic churn
