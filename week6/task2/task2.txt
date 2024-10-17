@@ -1,0 +1,33 @@
+kafka/bin/kafka-topics.sh --bootstrap-server localhost:9092 \
+--create --topic topic1 \
+--replication-factor 3 --partitions 3
+
+
+kafka/bin/kafka-topics.sh --bootstrap-server localhost:9092 --delete --topic topic1
+
+
+python3 -m pip install pip --upgrade
+python3 -m pip install -r requirements.txt
+
+wget https://raw.githubusercontent.com/erkansirin78/datasets/master/iris.csv
+
+python3 dataframe_to_kafka.py \
+    -t topic1 \
+    -i "input/iris.csv" \
+    -e csv \
+    -b "localhost:9092" \
+    -s ',' \
+    -shf true
+
+
+python3 dataframe_to_kafka.py \
+    -t topic1 \
+    -i iris.csv \
+    -e csv \
+    -b "localhost:9092" \
+    -s ',' \
+    -shf true
+
+/kafka/bin/kafka-console-producer.sh \
+    --bootstrap-server localhost:9092 \
+    --topic topic1

@@ -1,0 +1,15 @@
+1.
+docker exec -it kafka1 /kafka/bin/kafka-topics.sh --bootstrap-server localhost:9092 \
+--create --topic regions \
+--replication-factor 3 --partitions 3
+
+2.
+docker exec -it kafka1 python3 -m pip install pip --upgrade
+docker exec -it kafka1 python3 -m pip install confluent-kafka
+
+3.
+docker cp config.py kafka1:/
+docker cp producer.py kafka1:/
+
+4.
+docker exec -it kafka1 python3 consumer.py
