@@ -1,0 +1,72 @@
+wget https://github.com/erkansirin78/datasets/raw/master/IOT-temp.csv.zip
+unzip IOT-temp.csv.zip
+mkdir -p /tmp/output
+docker cp IOT-temp.csv kafka:/tmp/output/
+
+python3 dataframe_to_log.py \
+  --input /tmp/output/IOT-temp.csv \
+  --output /tmp/output \
+  --batch_interval 0.5 \
+  --batch_size 10 \
+  --repeat 1 \
+  --sep ',' \
+  --log_sep '|' \
+  --source_file_extension 'csv'
+
+6620/97606 processed, % 93.22 will be completed in 758.22 mins.
+repeat_counter 1
+total_counter 6620
+6630/97606 processed, % 93.21 will be completed in 758.13 mins.
+repeat_counter 1
+total_counter 6630
+6640/97606 processed, % 93.20 will be completed in 758.05 mins.
+repeat_counter 1
+total_counter 6640
+6650/97606 processed, % 93.19 will be completed in 757.97 mins.
+repeat_counter 1
+total_counter 6650
+6660/97606 processed, % 93.18 will be completed in 757.88 mins.
+repeat_counter 1
+total_counter 6660
+
+root@14102ec8c27d:/tmp/output# ls
+IOT-temp.csv            my_log_20241107-125410  my_log_20241107-130629  my_log_20241107-144134  my_log_20241107-144516  my_log_20241107-144857  my_log_20241107-145239
+my_log_20241107-125033  my_log_20241107-125415  my_log_20241107-130634  my_log_20241107-144139  my_log_20241107-144521  my_log_20241107-144902  my_log_20241107-145244
+my_log_20241107-125038  my_log_20241107-125420  my_log_20241107-130639  my_log_20241107-144144  my_log_20241107-144526  my_log_20241107-144908  my_log_20241107-145249
+my_log_20241107-125043  my_log_20241107-125425  my_log_20241107-130644  my_log_20241107-144149  my_log_20241107-144531  my_log_20241107-144913  my_log_20241107-145254
+my_log_20241107-125048  my_log_20241107-125430  my_log_20241107-130649  my_log_20241107-144154  my_log_20241107-144536  my_log_20241107-144918  my_log_20241107-145259
+my_log_20241107-125053  my_log_20241107-125435  my_log_20241107-130654  my_log_20241107-144159  my_log_20241107-144541  my_log_20241107-144923  my_log_20241107-145304
+my_log_20241107-125058  my_log_20241107-125440  my_log_20241107-135908  my_log_20241107-144205  my_log_20241107-144546  my_log_20241107-144928  my_log_20241107-145309
+my_log_20241107-125103  my_log_20241107-125445  my_log_20241107-135913  my_log_20241107-144210  my_log_20241107-144551  my_log_20241107-144933  my_log_20241107-145314
+my_log_20241107-125108  my_log_20241107-125450  my_log_20241107-135918  my_log_20241107-144215  my_log_20241107-144556  my_log_20241107-144938  my_log_20241107-145320
+my_log_20241107-125113  my_log_20241107-125455  my_log_20241107-135923  my_log_20241107-144220  my_log_20241107-144601  my_log_20241107-144943  my_log_20241107-145325
+
+
+docker cp kafka:/tmp/output /Users/allahverdihajiyev/Desktop/data-engineering-bootcamp/week9
+
+docker cp /Users/allahverdihajiyev/Desktop/data-engineering-bootcamp/week9/output/ spark:/tmp/iot-temp-input/
+
+docker cp week9.py spark:/tmp/
+
+which spark-submit
+/usr/local/bin/spark-submit
+
+/usr/local/bin/spark-submit /tmp/week9.py
+
+
+root@41c718b474ee:/tmp/iot-temp-output# ls
+_SUCCESS                                                  part-00004-dbac7bca-edc1-470f-81b0-5ddaae8a4c3a-c000.csv  part-00009-dbac7bca-edc1-470f-81b0-5ddaae8a4c3a-c000.csv
+part-00000-dbac7bca-edc1-470f-81b0-5ddaae8a4c3a-c000.csv  part-00005-dbac7bca-edc1-470f-81b0-5ddaae8a4c3a-c000.csv  part-00010-dbac7bca-edc1-470f-81b0-5ddaae8a4c3a-c000.csv
+part-00001-dbac7bca-edc1-470f-81b0-5ddaae8a4c3a-c000.csv  part-00006-dbac7bca-edc1-470f-81b0-5ddaae8a4c3a-c000.csv  part-00011-dbac7bca-edc1-470f-81b0-5ddaae8a4c3a-c000.csv
+part-00002-dbac7bca-edc1-470f-81b0-5ddaae8a4c3a-c000.csv  part-00007-dbac7bca-edc1-470f-81b0-5ddaae8a4c3a-c000.csv
+part-00003-dbac7bca-edc1-470f-81b0-5ddaae8a4c3a-c000.csv  part-00008-dbac7bca-edc1-470f-81b0-5ddaae8a4c3a-c000.csv
+root@41c718b474ee:/tmp/iot-temp-output# cat part-00004-dbac7bca-edc1-470f-81b0-5ddaae8a4c3a-c000.csv
+id|room_id|noted_date|temp|out_in|event_time|year|month|day_of_week
+__export__.temp_log_192802_d1ebc368|Room Admin|2018-12-07T14:20:00.000Z|29|Out|2024-11-07T14:41:20.268Z|2018|12|6
+__export__.temp_log_192803_5062371a|Room Admin|2018-12-07T14:20:00.000Z|29|Out|2024-11-07T14:41:20.769Z|2018|12|6
+__export__.temp_log_192800_1de278e0|Room Admin|2018-12-07T14:18:00.000Z|28|Out|2024-11-07T14:41:21.271Z|2018|12|6
+__export__.temp_log_192801_a2d67ddb|Room Admin|2018-12-07T14:18:00.000Z|28|Out|2024-11-07T14:41:21.773Z|2018|12|6
+__export__.temp_log_192798_2359ce5a|Room Admin|2018-12-07T14:18:00.000Z|29|In|2024-11-07T14:41:22.278Z|2018|12|6
+__export__.temp_log_192799_1d948f78|Room Admin|2018-12-07T14:18:00.000Z|29|In|2024-11-07T14:41:22.779Z|2018|12|6
+__export__.temp_log_192794_2f313f19|Room Admin|2018-12-07T14:16:00.000Z|27|Out|2024-11-07T14:41:23.281Z|2018|12|6
+__export__.temp_log_192797_f1461cfb|Room Admin|2018-12-07T14:16:00.000Z|27|Out|2024-11-07T14:41:23.786Z|2018|12|6
