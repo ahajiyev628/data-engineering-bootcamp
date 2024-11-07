@@ -4,14 +4,7 @@ spark = (SparkSession.builder
          .appName("week9")
          .getOrCreate())
 
-# log_schema = "id STRING, room_id STRING, noted_date STRING, temp INT, out_in STRING, event_time STRING"
-
-df = spark.read.format("csv") \
-    .option("header", "true") \
-    .option("inferSchema", "true") \
-    .load("file:///tmp/iot-temp-input/iot-temp-input")
-
-log_schema = df.schema
+log_schema = "id STRING, room_id STRING, noted_date STRING, temp INT, out_in STRING, event_time STRING"
 
 lines = spark.readStream.format("csv") \
     .schema(log_schema) \
